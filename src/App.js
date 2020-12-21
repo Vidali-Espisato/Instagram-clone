@@ -21,9 +21,11 @@ function App() {
         <img className="App__headerImage" src="https://fontmeme.com/images/instagram-new-logo.png" alt="instagram logo"/>
       </div>
       <h1>Hi all!</h1>
-      <Post username="Manish Roy" caption="Fucking awesome" imageUrl=""/>
-      <Post username="" caption="" imageUrl=""/>
-      <Post username="" caption="" imageUrl="https://cdn-images-1.medium.com/max/1200/1*ivjksIhvAs7TUXbQCxAU0A.jpeg"/>
+      {
+        posts.map(post => 
+          <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+        )
+      }
 
     </div>
   );
