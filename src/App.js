@@ -1,20 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Post from './Post';
+import { db } from './firebase';
 
 function App() {
-  const [posts, setPosts] = useState([
-    {
-      username: "v3n0m",
-      caption: "fucking awesome",
-      imageUrl: "https://bitrebels.com/wp-content/uploads/2018/06/programming-languages-learn-header-image.jpg"
-    },
-    {
-      username: "alyngdoh",
-      caption: "khi khi khi khi",
-      imageUrl: "https://cdn-images-1.medium.com/max/1200/1*ivjksIhvAs7TUXbQCxAU0A.jpeg"
-    }
-  ]);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    db.collection('posts').onSnapshot(snapshot => {
+      setPosts(snapshot.docs.map(doc => doc.data()));
+    });
+  }, []);
+
   return (
     <div className="App">
       <div className="App__header">
@@ -26,7 +22,6 @@ function App() {
           <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
         )
       }
-
     </div>
   );
 }
