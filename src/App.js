@@ -7,7 +7,10 @@ function App() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     db.collection('posts').onSnapshot(snapshot => {
-      setPosts(snapshot.docs.map(doc => doc.data()));
+      setPosts(snapshot.docs.map(doc => ({
+        id: doc.id,
+        post: doc.data()
+      })));
     });
   }, []);
 
@@ -18,8 +21,8 @@ function App() {
       </div>
       <h1>Hi all!</h1>
       {
-        posts.map(post => 
-          <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+        posts.map(({ id, post }) => 
+          <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
         )
       }
     </div>
