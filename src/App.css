@@ -22,3 +22,8 @@
   display:flex;
   flex-direction: column;
 }
+
+.Modal__button {
+  margin-top: 25px;
+  text-align: center;
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import Post from './Post';
-import { db } from './firebase';
+import { auth, db } from './firebase';
 import { Button, Input, makeStyles, Modal } from '@material-ui/core';
 
 
@@ -27,9 +27,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const signUp = () => {
-  console.log("Fuck yourself!");
-}
 
 function App() {
   const classes = useStyles();
@@ -39,6 +36,7 @@ function App() {
   const [username,  setUsername] = useState([]);
   const [email,  setEmail] = useState([]);
   const [password,  setPassword] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     db.collection('posts').onSnapshot(snapshot => {
@@ -48,6 +46,33 @@ function App() {
       })));
     });
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        console.log(authUser);
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => {
+      unsubscribe();
+    }
+  }, [user, username]);
+
+  const signUp = (event) => {
+    event.preventDefault();
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        authUser.user.updateProfile({
+          displayName: username,
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 
   return (
     <div className="App">
@@ -60,16 +85,22 @@ function App() {
             <center>
               <img className="App__headerImage" src="https://fontmeme.com/images/instagram-new-logo.png" alt="instagram logo"/>
             </center>
-            <Input placeholder="Username" type="text" value="" onChange={(e) => setUsername(e.target.value)}/>
-            <Input placeholder="Email" type="email" value="" onChange={(e) => setEmail(e.target.value)}/>
-            <Input placeholder="Password" type="password" value="" onChange={(e) => setPassword(e.target.value)}/>
-            <Button variant="contained" color="secondary" onClick={signUp}>Sign me up!!!</Button>
+            <Input placeholder="Username" type="text" onChange={e => setUsername(e.target.value)}/>
+            <Input placeholder="Email" type="email" onChange={e => setEmail(e.target.value)}/>
+            <Input placeholder="Password" type="password" onChange={e => setPassword(e.target.value)}/>
+            <div className="Modal__button">
+              <Button type="submit" variant="contained" color="secondary" onClick={signUp}>Sign me up!!!</Button>
+            </div>
           </form>
         </div>
       </Modal>
       <div className="App__header">
         <img className="App__headerImage" src="https://fontmeme.com/images/instagram-new-logo.png" alt="instagram logo"/>
-        <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>Sign Up</Button>
+        {user ? (
+          <Button variant="contained" color="secondary" onClick={() => auth.signOut()}>Log Out</Button>
+        ) : (
+          <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>Sign Up</Button>
+        )}
       </div>
       <h1>Hi all!</h1>
       {
