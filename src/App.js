@@ -33,9 +33,10 @@ function App() {
   const [modalStyle] = useState(getModalStyle);
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false);
-  const [username,  setUsername] = useState([]);
-  const [email,  setEmail] = useState([]);
-  const [password,  setPassword] = useState([]);
+  const [openSignIn, setOpenSignIn] = useState(false);
+  const [username,  setUsername] = useState('');
+  const [email,  setEmail] = useState('');
+  const [password,  setPassword] = useState('');
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -69,9 +70,15 @@ function App() {
           displayName: username,
         });
       })
-      .catch(function(error) {
-        console.log(error);
-      });
+      .catch((error) => alert(error.message));
+    setOpen(false);
+  }
+
+  const signIn = (event) => {
+    event.preventDefault();
+    auth.signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message));
+    setOpenSignIn(false);
   }
 
   return (
@@ -94,12 +101,34 @@ function App() {
           </form>
         </div>
       </Modal>
+
+      <Modal
+        open={openSignIn}
+        onClose={() => setOpenSignIn(false)}
+      >
+        <div style={modalStyle} className={classes.paper}>
+          <form className="App__signup">
+            <center>
+              <img className="App__headerImage" src="https://fontmeme.com/images/instagram-new-logo.png" alt="instagram logo"/>
+            </center>
+            <Input placeholder="Email" type="email" onChange={e => setEmail(e.target.value)}/>
+            <Input placeholder="Password" type="password" onChange={e => setPassword(e.target.value)}/>
+            <div className="Modal__button">
+              <Button type="submit" variant="contained" color="secondary" onClick={signIn}>Log me In!!!</Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
+
       <div className="App__header">
         <img className="App__headerImage" src="https://fontmeme.com/images/instagram-new-logo.png" alt="instagram logo"/>
         {user ? (
           <Button variant="contained" color="secondary" onClick={() => auth.signOut()}>Log Out</Button>
         ) : (
-          <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>Sign Up</Button>
+          <>
+            <Button variant="contained" color="secondary" onClick={() => setOpenSignIn(true)}>Log In</Button>
+            <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>Sign Up</Button>
+          </>
         )}
       </div>
       <h1>Hi all!</h1>
