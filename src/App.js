@@ -41,7 +41,7 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy("timestamp", "desc").onSnapshot(snapshot => {
       setPosts(snapshot.docs.map(doc => ({
         id: doc.id,
         post: doc.data()
@@ -126,18 +126,20 @@ function App() {
         {user ? (
           <Button variant="contained" color="secondary" onClick={() => auth.signOut()}>Log Out</Button>
         ) : (
-          <>
-            <Button variant="contained" color="secondary" onClick={() => setOpenSignIn(true)}>Log In</Button>
-            <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>Sign Up</Button>
-          </>
+          <div>
+            <Button onClick={() => setOpenSignIn(true)}>Log In</Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
         )}
       </div>
 
-      {
-        posts.map(({ id, post }) => 
-          <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
-        )
-      }
+      <div className="App__posts">
+        {
+          posts.map(({ id, post }) => 
+            <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+          )
+        }
+      </div>
       {user?.displayName ? (
         <ImageUpload username={user.displayName}/>
       ) : (
