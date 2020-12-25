@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Post from './Post';
 import { auth, db } from './firebase';
+import ImageUpload from './ImageUpload';
 import { Button, Input, makeStyles, Modal } from '@material-ui/core';
 
 
@@ -51,7 +52,7 @@ function App() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        console.log(authUser);
+        // console.log(authUser);
         setUser(authUser);
       } else {
         setUser(null);
@@ -60,7 +61,7 @@ function App() {
     return () => {
       unsubscribe();
     }
-  }, [user, username]);
+  }, [user]);
 
   const signUp = (event) => {
     event.preventDefault();
@@ -131,12 +132,17 @@ function App() {
           </>
         )}
       </div>
-      <h1>Hi all!</h1>
+
       {
         posts.map(({ id, post }) => 
           <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
         )
       }
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName}/>
+      ) : (
+        <h3>Login to create a post!!!</h3>
+      )}
     </div>
   );
 }
