@@ -55,9 +55,9 @@ function ImageUpload({username}) {
             <progress value={progress} max="100"/>
             <div className="input_fields">
                 <input type="file" className="first_input" onChange={handleChange}/>
-                <Input type="text" className="second_input" placeholder="Enter a caption..." onChange={(event) => setCaption(event.target.value)}/>
+                <Input type="text" className="second_input" value={caption} placeholder="Enter a caption..." onChange={(event) => setCaption(event.target.value)}/>
             </div>
-            <Button type="submit" variant="contained" color="secondary" onClick={handleUpload}>Upload</Button>
+            <Button type="submit" variant="contained" color="secondary" disabled={!caption} onClick={handleUpload}>Upload</Button>
         </div>
     )
 }

@@ -9,6 +9,7 @@
     padding: 10px;
     background-color: #fafafa;
     border: 1px solid lightgray;
+    z-index: 1;
 }
 
 .imageUpload progress {
