@@ -13,6 +13,9 @@ h2 {
 }
 
 .App__header {
+  position: sticky;
+  z-index: 1;
+  top: 0;
   background-color: white;
   padding-left: 10px;
   object-fit: contain;
@@ -52,3 +55,15 @@ h2 {
   text-align: center;
 }
 
+.footer {
+  background-color:rgb(65, 62, 62);
+  height: 100px;
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  z-index: -1;
+}

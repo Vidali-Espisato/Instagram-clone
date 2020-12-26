@@ -146,7 +146,9 @@ function App() {
           )
         }
       </div>
-      
+      <div className="footer">
+        <h4>Copyright © 2020 | Manish Roy</h4>
+      </div>
     </div>
   );
 }

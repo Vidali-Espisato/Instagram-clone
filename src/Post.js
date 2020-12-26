@@ -57,12 +57,12 @@ function Post({ postId, user, username, caption, imageUrl }) {
             </div>
 
             {
-                user ? (
+                user && (
                     <form className="Post__comment">
                         <Input className="Comment__box" type="text" value={comment} placeholder="Add a comment..." onChange={(e) => setComment(e.target.value)}/>
                         <Button className="Comment__button" type="submit" disabled={!comment} variant="outlined" color="secondary" endIcon={<Icon>send</Icon>} onClick={addComment}></Button>
                     </form>
-                ) : (<br></br>)
+                )
             }
         </div>
     )
