@@ -19,12 +19,14 @@
 .input_fields {
     margin: 10px 0;
     width: 80%;
+    display: flex;
 }
 
 .first_input {
     width: 85px;
+    align-self: center;
 }
 
 .second_input {
-    width: 80%;
+    flex: 1;
 }
